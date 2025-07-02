@@ -27,7 +27,7 @@ public class AdminController {
     private PasswordEncoder passwordEncoder;
 
     // ✅ Create Admin
-    @PostMapping("/createadmin")
+    @PostMapping("/auth/createadmin")
     public ResponseEntity<?> createAdmin(
             @RequestParam("userName") String userName,
             @RequestParam("password") String password,
@@ -60,7 +60,7 @@ public class AdminController {
     }
 
     // ✅ Get Admin by ID
-    @GetMapping("/getadminbyid/{id}")
+    @GetMapping("/getadminbyid/{adminId}")
     public ResponseEntity<?> getAdminById(@PathVariable String id) {
         Optional<Admin> admin = adminService.getAdminById(id);
         return admin.isPresent()
@@ -69,7 +69,7 @@ public class AdminController {
     }
 
     // ✅ Delete Admin by ID
-    @DeleteMapping("/deleteadmin/{id}")
+    @DeleteMapping("/deleteadmin/{adminId}")
     public ResponseEntity<?> deleteAdmin(@PathVariable String id) {
         if (adminService.getAdminById(id).isPresent()) {
             adminService.deleteAdmin(id);
