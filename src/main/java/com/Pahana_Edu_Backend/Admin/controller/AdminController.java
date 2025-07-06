@@ -53,7 +53,7 @@ public class AdminController {
     }
 
     // ✅ Get All Admins
-    @GetMapping("/getalladmins")
+    @GetMapping("/auth/getalladmins")
     public List<Admin> getAllAdmins() {
         return adminService.getAllAdmins();
     }
