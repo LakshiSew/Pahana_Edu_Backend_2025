@@ -33,8 +33,7 @@ public class AdminController {
             @RequestParam("password") String password,
             @RequestParam("email") String email,
             @RequestParam("position") String position,
-            @RequestParam("adminImage") MultipartFile adminImage
-    ) throws IOException {
+            @RequestParam("adminImage") MultipartFile adminImage) throws IOException {
 
         if (adminService.existsByUsername(userName)) {
             return ResponseEntity.status(409).body("Username already exists");
@@ -60,7 +59,7 @@ public class AdminController {
     }
 
     // ✅ Get Admin by ID
-    @GetMapping("/getadminbyid/{adminId}")
+    @GetMapping("/getadminbyid/{id}")
     public ResponseEntity<?> getAdminById(@PathVariable String id) {
         Optional<Admin> admin = adminService.getAdminById(id);
         return admin.isPresent()
@@ -69,7 +68,7 @@ public class AdminController {
     }
 
     // ✅ Delete Admin by ID
-    @DeleteMapping("/deleteadmin/{adminId}")
+    @DeleteMapping("/deleteadmin/{id}")
     public ResponseEntity<?> deleteAdmin(@PathVariable String id) {
         if (adminService.getAdminById(id).isPresent()) {
             adminService.deleteAdmin(id);
@@ -87,8 +86,7 @@ public class AdminController {
             @RequestParam("email") String email,
             @RequestParam("position") String position,
             @RequestParam(value = "password", required = false) String password,
-            @RequestParam(value = "adminImage", required = false) MultipartFile adminImage
-    ) throws IOException {
+            @RequestParam(value = "adminImage", required = false) MultipartFile adminImage) throws IOException {
         try {
             String adminImageUrl = adminImage != null ? cloudinaryService.uploadImage(adminImage) : null;
 

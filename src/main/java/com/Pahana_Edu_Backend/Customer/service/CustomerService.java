@@ -17,7 +17,11 @@ public interface CustomerService {
 
     Customer updateCustomer(String customerId, Customer customer);
 
+    Customer updateProfileImage(String customerId, String profileImage);
+
     boolean existsByUserName(String userName);
+
+    Customer verifyCustomer(String customerId);
 }
 
 

@@ -1,131 +1,64 @@
-package com.Pahana_Edu_Backend.Customer.serviceImpl;
-
+package com.Pahana_Edu_Backend.BookSuggestions.serviceImpl;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import com.Pahana_Edu_Backend.Customer.entity.Customer;
-import com.Pahana_Edu_Backend.Customer.repository.CustomerRepository;
-import com.Pahana_Edu_Backend.Customer.service.CustomerService;
+import com.Pahana_Edu_Backend.BookSuggestions.entity.Suggestions;
+import com.Pahana_Edu_Backend.BookSuggestions.repository.SuggestionsRepository;
+import com.Pahana_Edu_Backend.BookSuggestions.service.SuggestionsService;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
 @Service
-public class CustomerServiceImpl implements CustomerService {
+public class SuggestionsServiceImpl implements SuggestionsService {
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private SuggestionsRepository suggestionsRepository;
 
     @Autowired
     private JavaMailSender mailSender;
 
     @Override
-    public Customer addCustomer(Customer customer) {
-        customer.setStatus("PENDING");
-        return customerRepository.save(customer);
+    public Suggestions addSuggestion(Suggestions suggestion) {
+        suggestion.setStatus("PENDING");
+        return suggestionsRepository.save(suggestion);
     }
 
     @Override
-    public List<Customer> getAllCustomers() {
-        return customerRepository.findAll();
+    public List<Suggestions> getAllSuggestions() {
+        return suggestionsRepository.findAll();
     }
 
     @Override
-    public Optional<Customer> getCustomerById(String customerId) {
-        return customerRepository.findById(customerId);
-    }
+    public Suggestions markAsRead(String suggestionId) {
+        Optional<Suggestions> existingSuggestion = suggestionsRepository.findById(suggestionId);
 
-    @Override
-    public void deleteCustomer(String customerId) {
-        customerRepository.deleteById(customerId);
-    }
+        if (existingSuggestion.isPresent()) {
+            Suggestions suggestion = existingSuggestion.get();
+            suggestion.setStatus("MARK_AS_READ");
+            Suggestions updatedSuggestion = suggestionsRepository.save(suggestion);
 
-    @Override
-    public Customer updateCustomer(String customerId, Customer customer) {
-        Optional<Customer> existingCustomer = customerRepository.findById(customerId);
-
-        if (existingCustomer.isPresent()) {
-            Customer custToUpdate = existingCustomer.get();
-
-            // Update fields
-            custToUpdate.setCustomerName(customer.getCustomerName());
-            custToUpdate.setCustomerEmail(customer.getCustomerEmail());
-            custToUpdate.setAddress(customer.getAddress());
-            custToUpdate.setStatus(customer.getStatus());
-            custToUpdate.setUserName(customer.getUserName());
-            custToUpdate.setPassword(customer.getPassword());
-            custToUpdate.setCustomerPhone(customer.getCustomerPhone());
-            if (customer.getProfileImage() != null) {
-                custToUpdate.setProfileImage(customer.getProfileImage());
-            }
-
-            return customerRepository.save(custToUpdate);
+            // Send confirmation email
+            sendConfirmationEmail(suggestion.getEmail(), suggestion.getName(), suggestion.getBookTitle());
+            return updatedSuggestion;
         } else {
-            throw new RuntimeException("Customer not found with id: " + customerId);
+            throw new RuntimeException("Suggestion not found with id: " + suggestionId);
         }
     }
 
-    @Override
-    public Customer updateProfileImage(String customerId, String profileImage) {
-        Optional<Customer> existingCustomer = customerRepository.findById(customerId);
-
-        if (existingCustomer.isPresent()) {
-            Customer custToUpdate = existingCustomer.get();
-            custToUpdate.setProfileImage(profileImage);
-            return customerRepository.save(custToUpdate);
-        } else {
-            throw new RuntimeException("Customer not found with id: " + customerId);
-        }
-    }
-
-    @Override
-    public boolean existsByUserName(String userName) {
-        return customerRepository.existsByUserName(userName);
-    }
-
-    @Override
-    public Customer verifyCustomer(String customerId) {
-        Optional<Customer> existingCustomer = customerRepository.findById(customerId);
-
-        if (existingCustomer.isPresent()) {
-            Customer customer = existingCustomer.get();
-            customer.setStatus("VERIFIED");
-            Customer updatedCustomer = customerRepository.save(customer);
-
-            // Send verification email
-            sendVerificationEmail(customer.getCustomerEmail(), customer.getCustomerName());
-            return updatedCustomer;
-        } else {
-            throw new RuntimeException("Customer not found with id: " + customerId);
-        }
-    }
-
-    // private void sendVerificationEmail(String email, String name) {
-    //     SimpleMailMessage message = new SimpleMailMessage();
-    //     message.setTo(email);
-    //     message.setSubject("Account Verification");
-    //     message.setText(String.format(
-    //         "Dear %s,\n\nYour account has been successfully verified by our admin team. " +
-    //         "You can now access all features of our platform.\n\nBest regards,\nPahana Edu Team",
-    //         name
-    //     ));
-    //     mailSender.send(message);
-    // }
-
-       private void sendVerificationEmail(String email, String name) {
+    private void sendConfirmationEmail(String email, String name, String bookTitle) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
             helper.setTo(email);
-            helper.setSubject("Welcome to Pahana Edu - Account Verified!");
-            helper.setFrom("no-reply@pahanaedu.com"); // Update with your sender email
+            helper.setSubject("Thank You for Your Book Suggestion!");
+            helper.setFrom("no-reply@pahanaedu.com");
 
             String htmlContent = """
                 <!DOCTYPE html>
@@ -217,21 +150,25 @@ public class CustomerServiceImpl implements CustomerService {
                         <div class="header">
                             <img src="https://via.placeholder.com/150x50?text=Pahana+Edu" alt="Pahana Edu Logo" />
                         </div>
-                   
+                        <div class="content">
+                            <h1>Thank You, %s!</h1>
+                            <p>We have received your suggestion for the book "<strong>%s</strong>." Our team will consider your suggestion, and you can expect to find the book on our site soon.</p>
+                            <p>Thank you for helping us improve our platform!</p>
+                            <a href="http://localhost:3000" class="button">Visit Pahana Edu</a>
+                        </div>
                         <div class="footer">
-                            <p>Thank you for choosing Pahana Edu!</p>
                             <p>Need help? <a href="mailto:support@pahanaedu.com">Contact Support</a></p>
-                            <p>&copy; 2025 Pahana Edu. All rights reserved.</p>
+                            <p>© 2025 Pahana Edu. All rights reserved.</p>
                         </div>
                     </div>
                 </body>
                 </html>
-                """.formatted(name);
+                """.formatted(name, bookTitle);
 
-            helper.setText(htmlContent, true); // true indicates HTML content
+            helper.setText(htmlContent, true);
             mailSender.send(message);
         } catch (MessagingException e) {
-            throw new RuntimeException("Failed to send verification email: " + e.getMessage());
+            throw new RuntimeException("Failed to send confirmation email: " + e.getMessage());
         }
     }
 }

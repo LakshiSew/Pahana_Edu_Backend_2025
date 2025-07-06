@@ -1,80 +1,121 @@
 package com.Pahana_Edu_Backend.Customer.controller;
 
+import com.Pahana_Edu_Backend.Cloudinary.CloudinaryService;
 import com.Pahana_Edu_Backend.Customer.entity.Customer;
 import com.Pahana_Edu_Backend.Customer.service.CustomerService;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @CrossOrigin
+@RequestMapping("/auth")
 public class CustomerController {
 
     @Autowired
     private CustomerService customerService;
 
+    @Autowired
+    private CloudinaryService cloudinaryService;
+
     private final PasswordEncoder passwordEncoder;
 
-  
     public CustomerController(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // ✅ Create customer
-    @PostMapping("/auth/createcustomer")
-    public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
-        if (customerService.existsByUserName(customer.getUserName())) {
+    // Create customer (unchanged)
+    @PostMapping("/createcustomer")
+    public ResponseEntity<?> createCustomer(
+            @RequestParam("customerName") String customerName,
+            @RequestParam("customerEmail") String customerEmail,
+            @RequestParam("address") String address,
+            @RequestParam("userName") String userName,
+            @RequestParam("password") String password,
+            @RequestParam("customerPhone") String customerPhone,
+            @RequestParam("profileImage") MultipartFile profileImage) throws IOException {
+        if (customerService.existsByUserName(userName)) {
             return ResponseEntity.status(409).body("Username already exists");
         }
-
-        customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+        if (profileImage == null || profileImage.isEmpty()) {
+            return ResponseEntity.status(400).body("Profile image is required");
+        }
+        String imageUrl = cloudinaryService.uploadImage(profileImage);
+        Customer customer = new Customer();
+        customer.setCustomerName(customerName);
+        customer.setCustomerEmail(customerEmail);
+        customer.setAddress(address);
+        customer.setUserName(userName);
+        customer.setPassword(passwordEncoder.encode(password));
+        customer.setCustomerPhone(customerPhone);
+        customer.setStatus("PENDING");
+        customer.setProfileImage(imageUrl);
         Customer savedCustomer = customerService.addCustomer(customer);
         return ResponseEntity.ok(savedCustomer);
     }
 
-    // ✅ Get all customers
+    // Get all customers (no @PreAuthorize)
     @GetMapping("/getallcustomers")
-    public List<Customer> getAllCustomers() {
-        return customerService.getAllCustomers();
+    public ResponseEntity<List<Customer>> getAllCustomers() {
+        return ResponseEntity.ok(customerService.getAllCustomers());
     }
 
-    // ✅ Get customer by ID
+    // Get customer by ID (unchanged)
     @GetMapping("/getcustomerbyid/{customerId}")
     public ResponseEntity<?> getCustomerById(@PathVariable String customerId) {
         Customer customer = customerService.getCustomerById(customerId).orElse(null);
         if (customer != null) {
             return ResponseEntity.ok(customer);
-        } else {
-            return ResponseEntity.status(404).body("Customer not found");
         }
+        return ResponseEntity.status(404).body("Customer not found");
     }
 
-    // ✅ Update customer
+    // Update customer (unchanged)
     @PutMapping("/updatecustomer/{customerId}")
     public ResponseEntity<?> updateCustomer(@PathVariable String customerId, @RequestBody Customer customer) {
         Customer updated = customerService.updateCustomer(customerId, customer);
         if (updated != null) {
             return ResponseEntity.ok(updated);
-        } else {
-            return ResponseEntity.status(404).body("Customer not found");
         }
+        return ResponseEntity.status(404).body("Customer not found");
     }
 
-    // ✅ Delete customer
-     @DeleteMapping("/deletecustomer/{customerId}")
+    // Update profile image (unchanged)
+    @PostMapping("/updateprofileimage/{customerId}")
+    public ResponseEntity<?> updateProfileImage(@PathVariable String customerId, @RequestParam("image") MultipartFile image) throws IOException {
+        if (image == null || image.isEmpty()) {
+            return ResponseEntity.status(400).body("No image provided");
+        }
+        String imageUrl = cloudinaryService.uploadImage(image);
+        Customer updatedCustomer = customerService.updateProfileImage(customerId, imageUrl);
+        return ResponseEntity.ok(updatedCustomer);
+    }
+
+    // Delete customer (unchanged)
+    @DeleteMapping("/deletecustomer/{customerId}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable String customerId) {
         customerService.deleteCustomer(customerId);
         return ResponseEntity.noContent().build();
     }
 
-        @GetMapping("/auth/checkUsername")
-public ResponseEntity<Map<String, Boolean>> checkUsernameAvailability(@RequestParam String userName) {
-    boolean exists = customerService.existsByUserName(userName);
-    return ResponseEntity.ok().body(Map.of("exists", exists));
-}
+    // Check username availability (unchanged)
+    @GetMapping("/checkUsername")
+    public ResponseEntity<Map<String, Boolean>> checkUsernameAvailability(@RequestParam String userName) {
+        boolean exists = customerService.existsByUserName(userName);
+        return ResponseEntity.ok().body(Map.of("exists", exists));
+    }
+
+    // Admin verify customer (no @PreAuthorize)
+    @PutMapping("/admin/verifycustomer/{customerId}")
+    public ResponseEntity<?> verifyCustomer(@PathVariable String customerId) {
+        Customer verifiedCustomer = customerService.verifyCustomer(customerId);
+        return ResponseEntity.ok(verifiedCustomer);
+    }
 }

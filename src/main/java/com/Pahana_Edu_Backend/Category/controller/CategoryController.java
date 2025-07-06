@@ -58,8 +58,7 @@ public class CategoryController {
             @RequestParam(value = "description", required = false) String description,
             @RequestParam(value = "status", required = false) String status,
             @RequestParam(value = "type", required = false) String type,
-            @RequestParam(value = "categoryImg", required = false) MultipartFile categoryImg
-    ) throws IOException {
+            @RequestParam(value = "categoryImg", required = false) MultipartFile categoryImg) throws IOException {
         try {
             // Fetch existing category
             Category existingCategory = categoryService.getCategoryById(categoryId);
