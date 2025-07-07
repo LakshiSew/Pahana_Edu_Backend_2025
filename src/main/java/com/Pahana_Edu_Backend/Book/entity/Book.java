@@ -18,17 +18,17 @@ public class Book {
     private String imageUrl;
     private String title;
     private String description;
-    private String publisherName;
     private String category;
     private Integer stockQty;
     private Double price;
     private String author;
+      private String status; // "Active", "Inactive", "Out of Stock"
     private LocalDateTime createdAt = LocalDateTime.now();
 
     // Getters and Setters  
 
-      public Book(String pdfUrl, String imageUrl, String title, String description,  String publisherName,
-                   String category,Integer stockQty,Double price, String author) {
+      public Book(String pdfUrl, String imageUrl, String title, String description,
+                   String category,Integer stockQty,Double price, String author,String status) {
         this.pdfUrl = pdfUrl;
         this.imageUrl = imageUrl;
         this.title = title;
@@ -37,6 +37,7 @@ public class Book {
         this.stockQty = stockQty;
         this.author = author;
         this.price = price;
-        this.publisherName = publisherName;
+        this.status = status;
+        
     }
 }

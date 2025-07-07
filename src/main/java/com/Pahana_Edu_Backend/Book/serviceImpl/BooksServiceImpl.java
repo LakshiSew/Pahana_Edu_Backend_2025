@@ -15,16 +15,27 @@ public class BooksServiceImpl implements BookService {
     public BooksServiceImpl(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
+@Override
+public Book addBooks(String pdfUrl, String imageUrl, String title,
+                     String description,String category,
+                     Integer stockQty, Double price, String author, String status) {
 
-    @Override
-    public Book addBooks(String pdfUrl, String imageUrl, String title,
-                              String description,String publisherName, String category,Integer stockQty, Double price,String author) {
-        Book book = new Book(pdfUrl, imageUrl, title, description,publisherName, category,stockQty, price, author);
-        return bookRepository.save(book);
+    if (status == null || status.isEmpty()) {
+        status = "Active";
+    } else if (!status.equals("Active") && !status.equals("Inactive") && !status.equals("Out of Stock")) {
+        throw new IllegalArgumentException("Status must be either 'Active', 'Inactive', or 'Out of Stock'");
     }
+
+    Book book = new Book(pdfUrl, imageUrl, title, description,
+                         category, stockQty, price, author, status);
+    
+    return bookRepository.save(book);
+}
+  
 
     @Override
     public Book getbooksById(String id) {
         return bookRepository.findById(id).orElse(null);
     }
 }
+
