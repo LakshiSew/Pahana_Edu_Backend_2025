@@ -18,6 +18,7 @@ public class Book {
     private String imageUrl;
     private String title;
     private String description;
+    private String publisherName;
     private String category;
     private Integer stockQty;
     private Double price;
@@ -26,7 +27,7 @@ public class Book {
 
     // Getters and Setters  
 
-      public Book(String pdfUrl, String imageUrl, String title, String description, 
+      public Book(String pdfUrl, String imageUrl, String title, String description,  String publisherName,
                    String category,Integer stockQty,Double price, String author) {
         this.pdfUrl = pdfUrl;
         this.imageUrl = imageUrl;
@@ -36,5 +37,6 @@ public class Book {
         this.stockQty = stockQty;
         this.author = author;
         this.price = price;
+        this.publisherName = publisherName;
     }
 }

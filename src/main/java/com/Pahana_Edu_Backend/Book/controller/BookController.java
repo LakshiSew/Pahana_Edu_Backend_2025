@@ -36,6 +36,7 @@ public class BookController {
             @RequestParam("image") MultipartFile imageFile,
              @RequestParam String title,
         @RequestParam String description,
+           @RequestParam String publisherName,
         @RequestParam String category,
          @RequestParam Integer stockQty,
         @RequestParam Double price,
@@ -57,6 +58,7 @@ public class BookController {
             // Save URLs to MongoDB
             Book savedBooks = bookService.addBooks(pdfUrl, imageUrl, title,
             description,
+            publisherName,
             category,
             stockQty,
             price,

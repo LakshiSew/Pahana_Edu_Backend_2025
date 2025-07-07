@@ -18,8 +18,8 @@ public class BooksServiceImpl implements BookService {
 
     @Override
     public Book addBooks(String pdfUrl, String imageUrl, String title,
-                              String description, String category,Integer stockQty, Double price,String author) {
-        Book book = new Book(pdfUrl, imageUrl, title, description, category,stockQty, price, author);
+                              String description,String publisherName, String category,Integer stockQty, Double price,String author) {
+        Book book = new Book(pdfUrl, imageUrl, title, description,publisherName, category,stockQty, price, author);
         return bookRepository.save(book);
     }
 
