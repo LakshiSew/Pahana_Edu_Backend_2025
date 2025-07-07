@@ -22,7 +22,8 @@ public class Book {
     private Integer stockQty;
     private Double price;
     private String author;
-      private String status; // "Active", "Inactive", "Out of Stock"
+      private String status; 
+    //   private String publisherName;// "Active", "Inactive", "Out of Stock"
     private LocalDateTime createdAt = LocalDateTime.now();
 
     // Getters and Setters  
@@ -38,6 +39,7 @@ public class Book {
         this.author = author;
         this.price = price;
         this.status = status;
+        //  this.publisherName = publisherName;
         
     }
 }

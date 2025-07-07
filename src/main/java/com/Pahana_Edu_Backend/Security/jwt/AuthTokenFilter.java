@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.Pahana_Edu_Backend.Security.UserDetailsServiceImpl;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
@@ -54,8 +56,9 @@ public class AuthTokenFilter  extends OncePerRequestFilter{
 
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null,
                 userDetails.getAuthorities());
+authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                authenticationToken.setDetails(new WebAuthenticationDetails(request));/// error
+                // authenticationToken.setDetails(new WebAuthenticationDetails(request));/// error
 
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
