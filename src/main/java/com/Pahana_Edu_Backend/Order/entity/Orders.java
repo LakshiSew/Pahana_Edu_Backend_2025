@@ -25,22 +25,4 @@ public class Orders {
     private String status; // "Pending", "Confirmed", "Canceled"
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt;
-
-    public Orders() {
-    }
-
-    public Orders(String customerId, String customerName, String customerEmail, String address,
-                  String orderDate, String categoryId, List<String> productIds, String productType,
-                  Double totalPrice, String status) {
-        this.customerId = customerId;
-        this.customerName = customerName;
-        this.customerEmail = customerEmail;
-        this.address = address;
-        this.orderDate = orderDate;
-        this.categoryId = categoryId;
-        this.productIds = productIds;
-        this.productType = productType;
-        this.totalPrice = totalPrice;
-        this.status = status;
-    }
 }

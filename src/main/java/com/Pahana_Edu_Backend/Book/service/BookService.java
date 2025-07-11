@@ -1,17 +1,13 @@
 package com.Pahana_Edu_Backend.Book.service;
 
+import com.Pahana_Edu_Backend.Book.entity.Book;
 import java.util.List;
 
-import com.Pahana_Edu_Backend.Book.entity.Book;
-
 public interface BookService {
-    Book addBooks(String pdfUrl, String imageUrl, String title, String description, String category,Integer stockQty, Double price,String author,String status);
-    Book getbooksById(String id);
-   
-    Book updateBooks(String id, String pdfUrl, String imageUrl, String title, String description, String category, Integer stockQty, Double price, String author, String status);
-    void deleteBooks(String id);
+    Book addBook(Book book);
+    Book updateBook(String id, Book book);
+    void deleteBook(String id);
+    Book getBookById(String id);
     List<Book> getAllBooks();
-    List<Book> getBooksByCategoryId(String categoryId);
+    List<Book> getBooksByCategoryId(String categoryId); 
 }
-
-

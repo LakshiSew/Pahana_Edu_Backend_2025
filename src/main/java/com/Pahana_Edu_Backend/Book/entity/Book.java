@@ -1,45 +1,48 @@
 package com.Pahana_Edu_Backend.Book.entity;
 
-import java.time.LocalDateTime;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import lombok.Getter;
 import lombok.Setter;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Document(collection = "Book")
+@Document(collection = "books")
 public class Book {
-        @Id
-    private String id;
-    private String pdfUrl;
-    private String imageUrl;
+
+    @Id
+    private String bookId;
+
     private String title;
+
     private String description;
-    private String category;
+
+    private String categoryId;
+
     private Integer stockQty;
+
     private Double price;
+
+    private String image;
+
     private String author;
-      private String status; 
-    //   private String publisherName;// "Active", "Inactive", "Out of Stock"
-    private LocalDateTime createdAt = LocalDateTime.now();
 
-    // Getters and Setters  
+    private String aboutAuthor;
 
-      public Book(String pdfUrl, String imageUrl, String title, String description,
-                   String category,Integer stockQty,Double price, String author,String status) {
-        this.pdfUrl = pdfUrl;
-        this.imageUrl = imageUrl;
-        this.title = title;
-        this.description = description;
-        this.category = category;
-        this.stockQty = stockQty;
-        this.author = author;
-        this.price = price;
-        this.status = status;
-        //  this.publisherName = publisherName;
-        
-    }
+    private String language;
+
+    private String publisherName;
+
+    private Integer publicationYear;
+
+    private Double discount;
+
+    private String status;
+    
+    private String pdf; 
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 }

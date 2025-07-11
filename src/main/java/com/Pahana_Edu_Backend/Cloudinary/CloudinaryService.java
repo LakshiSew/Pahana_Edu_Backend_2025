@@ -86,7 +86,10 @@ public class CloudinaryService {
         return uploadFile(image, "image");
     }
 
-    public String uploadPdf(MultipartFile pdf) throws IOException {
+      public String uploadPdf(MultipartFile pdf) throws IOException {
+        if (pdf.getSize() > 10_000_000) {
+            throw new IllegalArgumentException("PDF file size exceeds 10MB limit");
+        }
         return uploadFile(pdf, "raw");
     }
 }
