@@ -1,4 +1,3 @@
-
 package com.Pahana_Edu_Backend.Book.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,20 +7,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import com.Pahana_Edu_Backend.Book.entity.Book;
-import java.io.InputStream; 
 import com.Pahana_Edu_Backend.Book.service.BookService;
 import com.Pahana_Edu_Backend.Cloudinary.CloudinaryService;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/auth")
 public class BookController {
 
     @Autowired
@@ -30,7 +28,7 @@ public class BookController {
     @Autowired
     private CloudinaryService cloudinaryService;
 
-    @PostMapping("/addbook")
+    @PostMapping("/auth/addbook")
     public ResponseEntity<?> addBook(
             @RequestParam("title") String title,
             @RequestParam("categoryId") String categoryId,
@@ -42,7 +40,11 @@ public class BookController {
             @RequestParam(value = "pdf", required = false) MultipartFile pdf,
             @RequestParam(value = "discount", required = false) Double discount,
             @RequestParam(value = "description", required = false) String description,
-            @RequestParam(value = "status", required = false) String status) throws IOException {
+            @RequestParam(value = "status", required = false) String status,
+            @RequestParam(value = "language", required = false) String language,
+            @RequestParam(value = "publisherName", required = false) String publisherName,
+            @RequestParam(value = "publicationYear", required = false) Integer publicationYear,
+            @RequestParam(value = "pages", required = false) Integer pages) throws IOException {
         try {
             Book book = new Book();
             book.setTitle(title);
@@ -54,6 +56,10 @@ public class BookController {
             book.setDiscount(discount);
             book.setDescription(description);
             book.setStatus(status != null && !status.isEmpty() ? status : "Active");
+            book.setLanguage(language);
+            book.setPublisherName(publisherName);
+            book.setPublicationYear(publicationYear);
+            book.setPages(pages);
 
             if (image != null && !image.isEmpty()) {
                 String imageUrl = cloudinaryService.uploadImage(image);
@@ -86,7 +92,11 @@ public class BookController {
             @RequestParam(value = "pdf", required = false) MultipartFile pdf,
             @RequestParam(value = "discount", required = false) Double discount,
             @RequestParam(value = "description", required = false) String description,
-            @RequestParam(value = "status", required = false) String status) throws IOException {
+            @RequestParam(value = "status", required = false) String status,
+            @RequestParam(value = "language", required = false) String language,
+            @RequestParam(value = "publisherName", required = false) String publisherName,
+            @RequestParam(value = "publicationYear", required = false) Integer publicationYear,
+            @RequestParam(value = "pages", required = false) Integer pages) throws IOException {
         try {
             Book book = new Book();
             book.setTitle(title);
@@ -98,6 +108,11 @@ public class BookController {
             book.setDiscount(discount);
             book.setDescription(description);
             book.setStatus(status);
+            book.setLanguage(language);
+            book.setPublisherName(publisherName);
+            book.setPublicationYear(publicationYear);
+            book.setPages(pages);
+
             if (image != null && !image.isEmpty()) {
                 String imageUrl = cloudinaryService.uploadImage(image);
                 book.setImage(imageUrl);
@@ -126,7 +141,7 @@ public class BookController {
         }
     }
 
-    @GetMapping("/getbookbyid/{id}")
+    @GetMapping("/auth/getbookbyid/{id}")
     public ResponseEntity<Book> getBookById(@PathVariable("id") String id) {
         try {
             Book book = bookService.getBookById(id);
@@ -136,12 +151,12 @@ public class BookController {
         }
     }
 
-    @GetMapping("/getallbooks")
+    @GetMapping("/auth/getallbooks")
     public ResponseEntity<List<Book>> getAllBooks() {
         return ResponseEntity.ok(bookService.getAllBooks());
     }
 
-    @GetMapping("/getbooksbycategoryid/{categoryId}")
+    @GetMapping("/auth/getbooksbycategoryid/{categoryId}")
     public ResponseEntity<?> getBooksByCategoryId(@PathVariable("categoryId") String categoryId) {
         try {
             List<Book> books = bookService.getBooksByCategoryId(categoryId);
@@ -151,16 +166,14 @@ public class BookController {
         }
     }
 
-    @GetMapping("/getpdfbybookid/{bookId}")
+    @GetMapping("/auth/getpdfbybookid/{bookId}")
     public ResponseEntity<Resource> getPdfByBookId(@PathVariable("bookId") String bookId) {
         try {
-            // Fetch book by ID
             Book book = bookService.getBookById(bookId);
             if (book == null || book.getPdf() == null || book.getPdf().isEmpty()) {
                 return ResponseEntity.status(404).body(null);
             }
 
-            // Fetch PDF from Cloudinary URL
             URL pdfUrl = new URL(book.getPdf());
             HttpURLConnection connection = (HttpURLConnection) pdfUrl.openConnection();
             connection.setRequestMethod("GET");
@@ -173,7 +186,6 @@ public class BookController {
             InputStream inputStream = connection.getInputStream();
             InputStreamResource resource = new InputStreamResource(inputStream);
 
-            // Set headers for PDF response
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=book-" + bookId + ".pdf");
             headers.add(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate");

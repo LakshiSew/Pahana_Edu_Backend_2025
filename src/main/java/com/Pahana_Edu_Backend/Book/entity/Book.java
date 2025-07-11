@@ -36,6 +36,8 @@ public class Book {
 
     private Integer publicationYear;
 
+    private Integer pages;
+
     private Double discount;
 
     private String status;

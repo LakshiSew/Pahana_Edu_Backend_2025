@@ -1,4 +1,3 @@
-
 package com.Pahana_Edu_Backend.Book.serviceImpl;
 
 import com.Pahana_Edu_Backend.Book.entity.Book;
@@ -45,6 +44,10 @@ public class BookServiceImpl implements BookService {
         if (book.getStockQty() == null || book.getStockQty() < 0) {
             logger.error("Stock quantity must be non-negative");
             throw new IllegalArgumentException("Stock quantity must be non-negative");
+        }
+        if (book.getPages() != null && book.getPages() < 0) {
+            logger.error("Pages must be non-negative");
+            throw new IllegalArgumentException("Pages must be non-negative");
         }
 
         // Validate status
@@ -104,7 +107,7 @@ public class BookServiceImpl implements BookService {
         if (book.getImage() != null && !book.getImage().trim().isEmpty()) {
             existingBook.setImage(book.getImage());
         }
-        if (book.getPdf() != null && !book.getPdf().trim().isEmpty()) { // Added PDF handling
+        if (book.getPdf() != null && !book.getPdf().trim().isEmpty()) {
             existingBook.setPdf(book.getPdf());
         }
         if (book.getDiscount() != null && book.getDiscount() >= 0) {
@@ -119,6 +122,18 @@ public class BookServiceImpl implements BookService {
                 throw new IllegalArgumentException("Status must be 'Active' or 'Inactive'");
             }
             existingBook.setStatus(book.getStatus());
+        }
+        if (book.getLanguage() != null && !book.getLanguage().trim().isEmpty()) {
+            existingBook.setLanguage(book.getLanguage());
+        }
+        if (book.getPublisherName() != null && !book.getPublisherName().trim().isEmpty()) {
+            existingBook.setPublisherName(book.getPublisherName());
+        }
+        if (book.getPublicationYear() != null && book.getPublicationYear() >= 0) {
+            existingBook.setPublicationYear(book.getPublicationYear());
+        }
+        if (book.getPages() != null && book.getPages() >= 0) {
+            existingBook.setPages(book.getPages());
         }
 
         existingBook.setUpdatedAt(LocalDateTime.now());
