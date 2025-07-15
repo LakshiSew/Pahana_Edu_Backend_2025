@@ -102,6 +102,10 @@
 //     }
 // }
 
+
+
+
+
 package com.Pahana_Edu_Backend.Order.controller;
 
 import com.Pahana_Edu_Backend.Order.entity.Orders;
@@ -121,6 +125,7 @@ public class OrdersController {
 
     @Autowired
     private OrdersService ordersService;
+
 
     @PostMapping("/auth/create")
     public ResponseEntity<?> createOrder(@RequestBody Orders order) {
@@ -208,4 +213,12 @@ public class OrdersController {
             return ResponseEntity.status(404).body(e.getMessage());
         }
     }
+
+     @GetMapping("/auth/getbestsellers")
+    public ResponseEntity<List<Map<String, Object>>> getBestSellers() {
+        return ResponseEntity.ok(ordersService.getBestSellers(10));
+    }
+
+    
 }
+

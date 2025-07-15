@@ -531,6 +531,7 @@
 //             throw new RuntimeException("Error generating PDF bill: " + e.getMessage());
 //         }
 //     }
+
 // }
 
 
@@ -1102,4 +1103,63 @@ public byte[] generateBillAsPdf(String orderId) {
         throw new RuntimeException("Error generating PDF bill: " + e.getMessage());
     }
 }
+
+@Override
+    public List<Map<String, Object>> getBestSellers(int limit) {
+        List<Orders> orders = ordersRepository.findAll();
+        Map<String, Integer> productCount = new HashMap<>();
+        Map<String, String> productTypes = new HashMap<>();
+
+        for (Orders order : orders) {
+            List<String> productIds = order.getProductIds() != null ? order.getProductIds() : new ArrayList<>();
+            Map<String, String> types = order.getProductTypes() != null ? order.getProductTypes() : new HashMap<>();
+            for (String productId : productIds) {
+                productCount.put(productId, productCount.getOrDefault(productId, 0) + 1);
+                productTypes.put(productId, types.getOrDefault(productId, "Unknown"));
+            }
+        }
+
+        List<Map.Entry<String, Integer>> sortedProducts = productCount.entrySet().stream()
+            .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+            .limit(limit)
+            .toList();
+
+        List<Map<String, Object>> bestSellers = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : sortedProducts) {
+            String productId = entry.getKey();
+            String productType = productTypes.getOrDefault(productId, "Unknown");
+            Map<String, Object> productDetails = new HashMap<>();
+
+            if (productType.equals("Book")) {
+                Optional<Book> book = bookRepository.findById(productId);
+                if (book.isPresent()) {
+                    productDetails.put("type", "Book");
+                    productDetails.put("id", book.get().getBookId());
+                    productDetails.put("title", book.get().getTitle());
+                    productDetails.put("price", book.get().getPrice());
+                    productDetails.put("discount", book.get().getDiscount() != null ? book.get().getDiscount() : 0.0);
+                    productDetails.put("image", book.get().getImage());
+                    productDetails.put("status", book.get().getStatus());
+                }
+            } else if (productType.equals("Accessory")) {
+                Optional<Accessories> accessory = accessoriesRepository.findById(productId);
+                if (accessory.isPresent()) {
+                    productDetails.put("type", "Accessory");
+                    productDetails.put("id", accessory.get().getId());
+                    productDetails.put("title", accessory.get().getItemName());
+                    productDetails.put("price", accessory.get().getPrice());
+                    productDetails.put("discount", accessory.get().getDiscount() != null ? accessory.get().getDiscount() : 0.0);
+                    productDetails.put("image", accessory.get().getImage());
+                    productDetails.put("status", accessory.get().getStatus());
+                }
+            }
+            if (!productDetails.isEmpty()) {
+                bestSellers.add(productDetails);
+            }
+        }
+
+        return bestSellers;
+    }
+
+    
 }

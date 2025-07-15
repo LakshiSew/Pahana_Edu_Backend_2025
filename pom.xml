@@ -108,6 +108,13 @@
     <type>pom</type>
 </dependency>
 
+<dependency>
+    <groupId>com.stripe</groupId>
+    <artifactId>stripe-java</artifactId>
+    <version>20.120.0</version>  <!-- or use the latest version -->
+</dependency>
+
+
 	</dependencies>
 
 	<build>

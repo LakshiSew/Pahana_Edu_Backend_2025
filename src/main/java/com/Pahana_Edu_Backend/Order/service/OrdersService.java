@@ -16,4 +16,6 @@ public interface OrdersService {
     String generateBill(String orderId);
     byte[] generateBillAsPdf(String orderId);
     Map<String, Object> viewBillAsJson(String orderId);
+        List<Map<String, Object>> getBestSellers(int limit);
+    
 }
