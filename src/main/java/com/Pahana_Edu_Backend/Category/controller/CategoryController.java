@@ -36,7 +36,7 @@ public class CategoryController {
             @RequestParam("description") String description,
             @RequestParam("status") String status,
             @RequestParam("type") String type // Required type parameter
-    ) throws IOException {
+    ) throws IOException { 
         // Upload category image to Cloudinary
         String categoryImageUrl = cloudinaryService.uploadImage(categoryImg);
 
