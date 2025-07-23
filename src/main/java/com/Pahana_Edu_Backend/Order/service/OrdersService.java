@@ -1,3 +1,25 @@
+// package com.Pahana_Edu_Backend.Order.service;
+
+// import com.Pahana_Edu_Backend.Order.entity.Orders;
+// import java.util.List;
+// import java.util.Map;
+// import java.util.Optional;
+
+// public interface OrdersService {
+//     Orders createOrder(Orders order);
+//     Optional<Orders> getOrderById(String orderId);
+//     List<Orders> getAllOrders();
+//     List<Orders> getOrdersByCustomerId(String customerId);
+//     List<Orders> getOrdersByCustomerPhone(String customerPhone);
+//     Orders updateOrderStatus(String orderId, String status);
+//     void deleteOrder(String orderId);
+//     String generateBill(String orderId);
+//     byte[] generateBillAsPdf(String orderId);
+//     Map<String, Object> viewBillAsJson(String orderId);
+//         List<Map<String, Object>> getBestSellers(int limit);
+    
+// }
+
 package com.Pahana_Edu_Backend.Order.service;
 
 import com.Pahana_Edu_Backend.Order.entity.Orders;
@@ -16,6 +38,5 @@ public interface OrdersService {
     String generateBill(String orderId);
     byte[] generateBillAsPdf(String orderId);
     Map<String, Object> viewBillAsJson(String orderId);
-        List<Map<String, Object>> getBestSellers(int limit);
-    
+    List<Map<String, Object>> getBestSellers(int limit);
 }
