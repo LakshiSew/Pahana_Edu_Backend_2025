@@ -46,7 +46,7 @@ public class JwtUtils {
         String role = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .findFirst()
-                .orElse(ROLE_CUSTOMER); // Default role
+                .orElse(ROLE_CUSTOMER); 
 
         String userId = null;
         AtomicReference<String> customRole = new AtomicReference<>(role);

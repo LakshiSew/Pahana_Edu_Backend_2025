@@ -24,7 +24,6 @@ public class Customer {
 
     private String status;
     
-
     private String userName;
 
     private String password;

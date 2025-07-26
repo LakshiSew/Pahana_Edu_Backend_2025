@@ -73,7 +73,7 @@ public class WebSecurityConfig {
         http
             .cors(cors -> cors.configurationSource(request -> {
                 var corsConfig = new org.springframework.web.cors.CorsConfiguration();
-                corsConfig.setAllowedOrigins(List.of("http://localhost:5173")); // Adjust frontend URL accordingly
+                corsConfig.setAllowedOrigins(List.of("http://localhost:5173")); 
                 corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
                 corsConfig.setAllowedHeaders(List.of("*"));
                 return corsConfig;
