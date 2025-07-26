@@ -236,4 +236,45 @@ public class CustomerController {
         Customer verifiedCustomer = customerService.verifyCustomer(customerId);
         return ResponseEntity.ok(verifiedCustomer);
     }
+
+@PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request) {
+        String userName = request.get("userName");
+        String email = request.get("email");
+        try {
+            customerService.generateResetCode(userName, email);
+            return ResponseEntity.ok("Reset code sent to your email");
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/verify-reset-code")
+    public ResponseEntity<?> verifyResetCode(@RequestBody Map<String, String> request) {
+        String userName = request.get("userName");
+        String code = request.get("code");
+        try {
+            boolean isValid = customerService.verifyResetCode(userName, code);
+            if (isValid) {
+                return ResponseEntity.ok("Code verified successfully");
+            } else {
+                return ResponseEntity.status(400).body("Invalid or expired code");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> request) {
+        String userName = request.get("userName");
+        String code = request.get("code");
+        String newPassword = request.get("newPassword");
+        try {
+            customerService.resetPasswordWithCode(userName, code, newPassword);
+            return ResponseEntity.ok("Password reset successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
 }

@@ -22,6 +22,10 @@ public interface CustomerService {
     boolean existsByUserName(String userName);
 
     Customer verifyCustomer(String customerId);
+
+    void generateResetCode(String userName, String email);
+    boolean verifyResetCode(String userName, String code);
+    void resetPasswordWithCode(String userName, String code, String newPassword);
 }
 
 
