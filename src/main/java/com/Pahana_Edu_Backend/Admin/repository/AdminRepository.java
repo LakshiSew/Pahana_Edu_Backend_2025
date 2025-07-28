@@ -10,6 +10,6 @@ public interface AdminRepository extends MongoRepository<Admin, String> {
    
  Optional<Admin> findByUserName(String userName); 
 
-    boolean existsByUserName(String userName); 
+ boolean existsByUserName(String userName); 
     
 }
