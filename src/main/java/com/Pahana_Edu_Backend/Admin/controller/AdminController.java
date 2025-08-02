@@ -26,7 +26,6 @@ public class AdminController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // ✅ Create Admin
     @PostMapping("/auth/createadmin")
     public ResponseEntity<?> createAdmin(
             @RequestParam("userName") String userName,
@@ -52,13 +51,11 @@ public class AdminController {
         return ResponseEntity.ok(savedAdmin);
     }
 
-    // ✅ Get All Admins
     @GetMapping("/auth/getalladmins")
     public List<Admin> getAllAdmins() {
         return adminService.getAllAdmins();
     }
 
-    // ✅ Get Admin by ID
     @GetMapping("/getadminbyid/{id}")
     public ResponseEntity<?> getAdminById(@PathVariable String id) {
         Optional<Admin> admin = adminService.getAdminById(id);
@@ -67,7 +64,6 @@ public class AdminController {
                 : ResponseEntity.status(404).body("Admin not found");
     }
 
-    // ✅ Delete Admin by ID
     @DeleteMapping("/deleteadmin/{id}")
     public ResponseEntity<?> deleteAdmin(@PathVariable String id) {
         if (adminService.getAdminById(id).isPresent()) {
@@ -78,7 +74,6 @@ public class AdminController {
         }
     }
 
-    // ✅ Update Admin
     @PutMapping("/updateadmin/{id}")
     public ResponseEntity<?> updateAdmin(
             @PathVariable String id,

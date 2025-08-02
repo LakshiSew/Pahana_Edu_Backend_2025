@@ -148,13 +148,12 @@ public class SuggestionsServiceImpl implements SuggestionsService {
                 <body>
                     <div class="container">
                         <div class="header">
-                            <img src="https://via.placeholder.com/150x50?text=Pahana+Edu" alt="Pahana Edu Logo" />
+                            <h2>Pahana Edu</h2>
                         </div>
                         <div class="content">
                             <h1>Thank You, %s!</h1>
                             <p>We have received your suggestion for the book "<strong>%s</strong>." Our team will consider your suggestion, and you can expect to find the book on our site soon.</p>
                             <p>Thank you for helping us improve our platform!</p>
-                            <a href="http://localhost:3000" class="button">Visit Pahana Edu</a>
                         </div>
                         <div class="footer">
                             <p>Need help? <a href="mailto:support@pahanaedu.com">Contact Support</a></p>

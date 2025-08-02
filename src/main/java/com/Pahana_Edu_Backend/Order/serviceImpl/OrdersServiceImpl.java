@@ -1427,8 +1427,8 @@
             helper.setFrom("manojprasanka8@gmail.com");
 
             String statusMessage = order.getStatus().equals("Confirmed") ?
-                "Your order has been successfully confirmed. Thank you for shopping with us!" :
-                "Your order has been canceled. Please contact support if you have any questions.";
+                "Your order has been successfully confirmed. Thank you for shopping with us! You will be contacted by our delivery service soon." :
+                "Your order has been canceled.Your money will be refunded within two days.Please contact support if you have any questions.";
 
             StringBuilder productDetails = new StringBuilder();
             double totalDiscount = 0.0;
@@ -1550,8 +1550,8 @@
                 <body>
                     <div class="container">
                         <div class="header">
-                            <img src="https://via.placeholder.com/150x50?text=Pahana+Edu" alt="Pahana Edu Logo" />
-                        </div>
+                                <h1>Pahana Edu</h1>
+                            </div>
                         <div class="content">
                             <h1>Order %s</h1>
                             <p>Dear %s,</p>
@@ -1565,7 +1565,6 @@
                             <p>Total Discount: Rs. %s</p>
                             <p>Final Total Price: Rs. %s</p>
                             <p>Status: %s</p>
-                            <p><a href="https://pahanaedu.com/orders/%s" class="button">View Order</a></p>
                         </div>
                         <div class="footer">
                             <p>Thank you for choosing Pahana Edu!</p>

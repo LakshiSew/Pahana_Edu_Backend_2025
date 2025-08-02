@@ -711,13 +711,13 @@ public class CustomerServiceImpl implements CustomerService {
                     <body>
                         <div class="container">
                             <div class="header">
-                                <img src="https://via.placeholder.com/150x50?text=Pahana+Edu" alt="Pahana Edu Logo" />
+                                <h3>Pahana Edu</h3>
                             </div>
                             <div class="content">
                                 <h1>Welcome, %s!</h1>
-                                <p>Your account has been successfully verified by our admin team. You can now access all features of our platform.</p>
+                                <p>Your account has been successfully verified.</p>
+                                <p><strong>Your are now part of a growing community of learners!</strong></p>
                                 <p>Explore our educational resources and start your learning journey with us!</p>
-                                <a href="http://localhost:3000/login" class="button">Log In to Your Account</a>
                             </div>
                             <div class="footer">
                                 <p>Thank you for choosing Pahana Edu!</p>
@@ -831,7 +831,7 @@ public class CustomerServiceImpl implements CustomerService {
                     <body>
                         <div class="container">
                             <div class="header">
-                                <img src="https://via.placeholder.com/150x50?text=Pahana+Edu" alt="Pahana Edu Logo" />
+                                <h2 style="margin: 0; font-family: Arial, sans-serif; color: #333;">Pahana Edu</h2>
                             </div>
                             <div class="content">
                                 <h1>Password Reset Code</h1>

@@ -17,13 +17,11 @@ public class FeedbackController {
     @Autowired
     private FeedbackService feedbackService;
 
-    // Get All Feedback
     @GetMapping("/auth/getallfeedback")
     public List<Feedback> getAllFeedback() {
         return feedbackService.getAllFeedback();
     }
 
-    // Get Feedback by ID
     @GetMapping("/getfeedback/{id}")
     public ResponseEntity<?> getFeedbackById(@PathVariable String id) {
         Optional<Feedback> feedback = feedbackService.getFeedbackById(id);
@@ -32,7 +30,7 @@ public class FeedbackController {
                 : ResponseEntity.status(404).body("Feedback not found");
     }
 
-    // Create Feedback
+   
     @PostMapping("/auth/createfeedback")
     public ResponseEntity<?> createFeedback(
             @RequestParam("quote") String quote,
@@ -40,12 +38,10 @@ public class FeedbackController {
             @RequestParam("email") String email,
             @RequestParam("rating") int rating,
             @RequestParam(value = "image", required = false) MultipartFile image) {
-        // Validate rating (1-5 stars)
         if (rating < 1 || rating > 5) {
             return ResponseEntity.badRequest().body("Rating must be between 1 and 5");
         }
 
-        // Validate required fields
         if (quote == null || quote.trim().isEmpty() || name == null || name.trim().isEmpty() || email == null || email.trim().isEmpty()) {
             return ResponseEntity.badRequest().body("Quote, name, and email are required");
         }
@@ -56,7 +52,6 @@ public class FeedbackController {
         feedback.setEmail(email);
         feedback.setRating(rating);
 
-        // Handle image upload
         if (image != null && !image.isEmpty()) {
             try {
                 String base64Image = Base64.getEncoder().encodeToString(image.getBytes());
