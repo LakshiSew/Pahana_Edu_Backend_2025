@@ -4,5 +4,5 @@ import com.Pahana_Edu_Backend.Feedback.entity.Feedback;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface FeedbackRepository extends MongoRepository<Feedback, String> {
-    // Custom queries can be added here, if needed
+   
 }

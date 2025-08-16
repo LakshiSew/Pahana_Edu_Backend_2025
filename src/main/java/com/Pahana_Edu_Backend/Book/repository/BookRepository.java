@@ -8,6 +8,6 @@ import com.Pahana_Edu_Backend.Book.entity.Book;
 
 @Repository
 public interface BookRepository extends MongoRepository<Book, String> {
-    // You can add custom methods if needed, e.g., for querying by categoryId
+   
     List<Book> findByCategoryId(String categoryId);
 }
