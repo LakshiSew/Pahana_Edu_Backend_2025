@@ -77,7 +77,7 @@ public class CustomerController {
 
     @PutMapping("/updatecustomer/{customerId}")
     public ResponseEntity<?> updateCustomer(@PathVariable String customerId, @RequestBody Customer customer) {
-        // Prevent updating userName and password via this endpoint
+      
         if (customer.getUserName() != null || customer.getPassword() != null) {
             return ResponseEntity.status(400).body("Username and password cannot be updated via this endpoint");
         }
